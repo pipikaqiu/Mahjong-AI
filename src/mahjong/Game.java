@@ -50,7 +50,7 @@ public class Game {
     public boolean finish() {
         boolean finish = judger.canFinish(this);
         if (finish) {
-            Player winner = judger.getResult();
+            Player winner = judger.getWinner();
             if (winner == null) {
                 judger.setScores(players, currentPlayer(), GameLogger.Action.DRAW_END);
                 logger.logAction(GameLogger.Action.DRAW_END, null, null);

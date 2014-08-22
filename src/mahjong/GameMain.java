@@ -11,7 +11,7 @@ import mahjong.rules.*;
 public class GameMain {
     
     public static void main(String[] args) {
-        Game game = new Game(new DefaultJudger(), new StdLogger());
+        Game game = new Game(new JPGameJudger(), new StdLogger());
         String[] names = {"a", "b", "c", "d"};
         
         for (String name : names) {
