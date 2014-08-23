@@ -5,8 +5,13 @@ import java.util.List;
 import mahjong.Game;
 import mahjong.Helper;
 import mahjong.Player;
-import mahjong.Tile;
+import mahjong.tiles.Tile;
 import mahjong.loggers.GameLogger;
+import mahjong.rules.DefaultWinPattern;
+import mahjong.rules.Judger;
+import mahjong.rules.SevenPairWinPattern;
+import mahjong.rules.ThirteenOrphansWinPattern;
+import mahjong.rules.WinPattern;
 
 /**
  *

@@ -1,7 +1,7 @@
 package mahjong.loggers;
 
 import mahjong.Player;
-import mahjong.Tile;
+import mahjong.tiles.Tile;
 
 /**
  *

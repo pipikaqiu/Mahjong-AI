@@ -1,10 +1,13 @@
 package mahjong;
 
-import mahjong.loggers.GameLogger;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import mahjong.loggers.GameLogger;
 import mahjong.rules.Judger;
+import mahjong.tiles.DroppedTile;
+import mahjong.tiles.Tile;
+import mahjong.tiles.TileGenerator;
 
 /**
  *
@@ -12,11 +15,12 @@ import mahjong.rules.Judger;
  */
 public class Game {
 
-    public Game(Judger judger, GameLogger logger) {
+    public Game(TileGenerator generator, Judger judger, GameLogger logger) {
         this.judger = judger;
         this.logger = logger;
 
-        this.tiles = initTiles();
+        this.tiles = generator.initTiles();
+        logger.debug("Finish init tiles: " + tiles);
         this.dropPool = new LinkedList<>();
         this.players = new LinkedList<>();
         this.playerIndex = 0;
@@ -60,7 +64,7 @@ public class Game {
             }
             StringBuilder buf = new StringBuilder();
             buf.append("STATUS");
-            while(buf.length() < 10){
+            while (buf.length() < 10) {
                 buf.append(" ");
             }
             buf.append(": ");
@@ -112,35 +116,50 @@ public class Game {
         return tiles;
     }
 
+    public boolean checkKong() {
+        for(Player p : players){
+            if(p != currentPlayer() && Helper.canKong(p.getTiles(), getLastDroppedTile().getTile())){
+                return p.kong(getLastDroppedTile());
+            }
+        }
+        
+        return false;
+    }
+
+    public boolean checkPung() {
+        for(Player p : players){
+            if(p != currentPlayer() && Helper.canPung(p.getTiles(), getLastDroppedTile().getTile())){
+                boolean isPung = p.pung(getLastDroppedTile());
+                if(isPung){
+                    p.pick(getOneTile());
+                }
+            }
+        }
+        
+        return false;
+    }
+
+    public boolean checkChow() {
+        Player next = players.get((playerIndex + 1) % players.size());
+        if(Helper.canChow(next.getTiles(), getLastDroppedTile().getTile())){
+            return next.chow(getLastDroppedTile());
+        }
+        
+        return false;
+    }
+
+
     public static enum Direction {
 
         EAST, SOUTH, WEST, NORTH
     }
 
-    protected LinkedList<Tile> initTiles() {
-        LinkedList<Tile> tiles = new LinkedList<>();
 
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 3; j++) {
-                for (int k = 1; k < 10; k++) {
-                    tiles.add(new Tile(k, Tile.Type.values()[j]));
-                }
-            }
-            for (int j = 3; j < Tile.Type.values().length; j++) {
-                tiles.add(new Tile(Tile.Type.values()[j]));
-            }
-        }
+    protected final LinkedList<Tile> tiles;
+    protected final LinkedList<DroppedTile> dropPool;
+    protected final List<Player> players;
+    protected final Judger judger;
+    protected final GameLogger logger;
 
-        Collections.shuffle(tiles);
-        logger.debug("Finish init tiles: " + tiles);
-        return tiles;
-    }
-
-    private final LinkedList<Tile> tiles;
-    private final LinkedList<DroppedTile> dropPool;
-    private final List<Player> players;
-    private final Judger judger;
-    private final GameLogger logger;
-
-    private int playerIndex;
+    protected int playerIndex;
 }

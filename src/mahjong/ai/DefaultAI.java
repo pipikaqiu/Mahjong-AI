@@ -1,10 +1,11 @@
 
 package mahjong.ai;
 
-import java.util.LinkedList;
-import mahjong.DroppedTile;
+import java.util.List;
+import mahjong.tiles.DroppedTile;
 import mahjong.Game;
-import mahjong.Tile;
+import mahjong.Player;
+import mahjong.tiles.Tile;
 
 /**
  *
@@ -13,13 +14,24 @@ import mahjong.Tile;
 public class DefaultAI implements AI{
 
     @Override
-    public Tile chooseWorst(LinkedList<Tile> tiles, Game game) {
-        return tiles.get(0);
+    public Tile[] wannaKong(Game game, Player player, DroppedTile lastDroppedTile) {
+        return null;
     }
 
     @Override
-    public boolean wannaPickFromOther(Game game, DroppedTile tile) {
-        return false;
+    public Tile[] wannaPung(Game game, Player player, DroppedTile lastDroppedTile) {
+        return null;
     }
+
+    @Override
+    public Tile[] wannaChow(Game game, Player player, DroppedTile lastDroppedTile) {
+        return null;
+    }
+
+    @Override
+    public Tile chooseWorst(Game game, Player player, List<Tile> tiles) {
+        return tiles.get(tiles.size() - 1);
+    }
+
     
 }

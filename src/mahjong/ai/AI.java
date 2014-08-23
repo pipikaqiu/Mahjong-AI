@@ -1,9 +1,10 @@
 package mahjong.ai;
 
-import java.util.LinkedList;
-import mahjong.DroppedTile;
+import java.util.List;
+import mahjong.tiles.DroppedTile;
 import mahjong.Game;
-import mahjong.Tile;
+import mahjong.Player;
+import mahjong.tiles.Tile;
 
 /**
  *
@@ -11,8 +12,12 @@ import mahjong.Tile;
  */
 public interface AI {
 
-    public Tile chooseWorst(LinkedList<Tile> tiles, Game game);
+    public Tile[] wannaKong(Game game, Player player, DroppedTile lastDroppedTile);
 
-    public boolean wannaPickFromOther(Game game, DroppedTile tile);
-    
+    public Tile[] wannaPung(Game game, Player player, DroppedTile lastDroppedTile);
+
+    public Tile[] wannaChow(Game game, Player player, DroppedTile lastDroppedTile);
+
+    public Tile chooseWorst(Game game, Player player, List<Tile> tiles);
+
 }

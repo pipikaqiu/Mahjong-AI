@@ -1,7 +1,8 @@
 package mahjong;
 
-import java.util.Collections;
-import java.util.LinkedList;
+import mahjong.tiles.Tile;
+import mahjong.tiles.DroppedTile;
+import java.util.*;
 import mahjong.ai.AI;
 
 /**
@@ -13,8 +14,9 @@ public class Player {
     public Player(AI ai, String name) {
         this.ai = ai;
         this.name = name;
-        this.tiles = new LinkedList<>();
-        this.meld = false;
+        this.tiles = new ArrayList<>();
+
+        this.meldedTiles = new LinkedList<>();
     }
 
     public void pick(Tile t) {
@@ -22,20 +24,36 @@ public class Player {
         Collections.sort(tiles);
     }
 
-    public void pick(DroppedTile t) {
-        pick(t.getTile());
-        t.meld(this);
-        meld = true;
+    public boolean kong(DroppedTile lastDroppedTile) {
+        Tile[] others = ai.wannaKong(game, this, lastDroppedTile);
+        return afterMeld(others, lastDroppedTile);
     }
-    
-    public boolean wannaPickFromOther(){
-        return ai.wannaPickFromOther(game, game.getLastDroppedTile());
+
+    public boolean pung(DroppedTile lastDroppedTile) {
+        Tile[] others = ai.wannaPung(game, this, lastDroppedTile);
+        return afterMeld(others, lastDroppedTile);
     }
-    
-    public Tile drop(){
-        Tile t = ai.chooseWorst(tiles, game);
+
+    public boolean chow(DroppedTile lastDroppedTile) {
+        Tile[] others = ai.wannaChow(game, this, lastDroppedTile);
+        return afterMeld(others, lastDroppedTile);
+    }
+
+    private boolean afterMeld(Tile[] others, DroppedTile lastDroppedTile) {
+        if (others != null) {
+            meldedTiles.addAll(Arrays.asList(others));
+            meldedTiles.add(lastDroppedTile.getTile());
+            lastDroppedTile.meld(this);
+            return true;
+        }
+
+        return false;
+    }
+
+    public Tile drop() {
+        Tile t = ai.chooseWorst(game, this, tiles);
         tiles.remove(t);
-        
+
         return t;
     }
 
@@ -60,10 +78,10 @@ public class Player {
     }
 
     public boolean isMelded() {
-        return meld;
+        return !meldedTiles.isEmpty();
     }
 
-    public LinkedList<Tile> getTiles() {
+    public List<Tile> getTiles() {
         return tiles;
     }
 
@@ -78,9 +96,9 @@ public class Player {
 
     private final AI ai;
     private final String name;
-    private final LinkedList<Tile> tiles;
+    private final List<Tile> tiles;
+    private final List<Tile> meldedTiles;
     private int score;
     private Game.Direction direction;
-    private boolean meld;
     private Game game;
 }

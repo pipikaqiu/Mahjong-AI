@@ -1,4 +1,6 @@
-package mahjong;
+package mahjong.tiles;
+
+import mahjong.Player;
 
 /**
  *
@@ -36,7 +38,7 @@ public class DroppedTile {
         return "from: " + from + " [" + tile + "]";
     }
 
-    private final Tile tile;
-    private final Player from;
-    private Player to;
+    protected final Tile tile;
+    protected final Player from;
+    protected Player to;
 }

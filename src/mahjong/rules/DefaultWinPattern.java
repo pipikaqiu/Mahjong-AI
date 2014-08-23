@@ -2,7 +2,7 @@ package mahjong.rules;
 
 import java.util.List;
 import mahjong.Helper;
-import mahjong.Tile;
+import mahjong.tiles.Tile;
 
 /**
  *

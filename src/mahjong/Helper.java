@@ -1,5 +1,8 @@
 package mahjong;
 
+import mahjong.tiles.Tile;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,13 +56,13 @@ public class Helper {
      */
     public static Tile[] findChow(List<Tile> tiles) {
         Tile[] r = new Tile[3];
-        for (Tile.Type t : Tile.Type.values()) {
+        for (String t : Tile.SUITS) {
             int[] count = new int[9];
             for (Tile tile : tiles) {
                 if(tile.getNum() == 0){
                     continue;
                 }
-                if (tile.getType() == t) {
+                if (tile.getType().equals(t)) {
                     count[tile.getNum() - 1]++;
                 }
             }
@@ -147,5 +150,32 @@ public class Helper {
         }
 
         return buf.toString();
+    }
+
+    public static boolean canChow(List<Tile> tiles, Tile tile) {
+        List<Tile> allTiles = new ArrayList<>();
+        allTiles.addAll(tiles);
+        allTiles.add(tile);
+        Collections.sort(allTiles);
+        
+        return hasChow(tiles);
+    }
+
+    public static boolean canPung(List<Tile> tiles, Tile tile) {
+        List<Tile> allTiles = new ArrayList<>();
+        allTiles.addAll(tiles);
+        allTiles.add(tile);
+        Collections.sort(allTiles);
+        
+        return hasPung(tiles);
+    }
+
+    public static boolean canKong(List<Tile> tiles, Tile tile) {
+        List<Tile> allTiles = new ArrayList<>();
+        allTiles.addAll(tiles);
+        allTiles.add(tile);
+        Collections.sort(allTiles);
+        
+        return hasKong(tiles);
     }
 }
