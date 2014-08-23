@@ -1,4 +1,8 @@
 .DS_Store
+.classpath
+.project
 build.xml
 build
 nbproject
+/.git/
+/bin/
